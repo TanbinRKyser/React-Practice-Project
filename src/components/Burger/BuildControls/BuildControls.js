@@ -12,6 +12,7 @@ const controls = [
 
 const buildControls = ( props ) => (
     <div className={styles.BurgerControls}>
+        <p>Burger Price: <strong>$ {props.price.toFixed(2)} </strong></p>
         {controls.map( ctrl => {
             return <BuildControl 
                     key={ctrl.label} 
