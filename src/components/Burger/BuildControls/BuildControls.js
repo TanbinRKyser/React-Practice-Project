@@ -13,7 +13,10 @@ const controls = [
 const buildControls = ( props ) => (
     <div className={styles.BurgerControls}>
         {controls.map( ctrl => {
-            return <BuildControl key={ctrl.label} label={ctrl.label} />
+            return <BuildControl 
+                    key={ctrl.label} 
+                    label={ctrl.label} 
+                    added={ () => props.ingredientAdded(ctrl.type)}/>
         })}
     </div>
 );
