@@ -11,37 +11,35 @@ const withErrorHandler = ( WrappedComponent, axios ) => {
             error: null
         }
 
-        componentDidMount(){
+        UNSAFE_componentdWillMount(){
             // request
-            this.requestInterceptor = axios.interceptors.request.use( request => {
-                this.setState({ error: null });
-                return request;
-            });
+            this.reqInterceptor = axios.interceptors.request.use( req => {
+                this.setState( { error: null } );
+                return req;
+            } );
             // response
-            this.responseInterceptor = axios.interceptors.response.use( response => {
-                return response;
-            }, error =>{
-                this.setState({ error : error })
-            });
+            this.resInterceptor = axios.interceptors.response.use( res => res, error => {
+                this.setState( { error: error } );
+            } );
         }
 
         componentWillUnmount(){
             // console.log('Will unmount', this.requestInterceptor, this.responseInterceptor);
-            axios.interceptors.request.eject( this.requestInterceptor );
-            axios.interceptors.response.eject( this.requestInterceptor );
+            axios.interceptors.request.eject( this.reqInterceptor );
+            axios.interceptors.response.eject( this.resInterceptor );
         }
 
         errorConfirmedHandler = () => {
-            this.setState({error : null })
+            this.setState( { error: null } );
         }
 
         render() {
             return(
                 <Aux>
-                    <Modal 
+                    <Modal
                         show={this.state.error}
                         modalClosed={this.errorConfirmedHandler}>
-                        { this.state.error ? this.state.error.message : null }
+                        {this.state.error ? this.state.error.message : null}
                     </Modal>
                     <WrappedComponent { ...this.props} />
                 </Aux>
