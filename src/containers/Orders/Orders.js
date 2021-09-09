@@ -1,7 +1,7 @@
 import React,{ Component } from "react";
 import Order from '../../components/Order/Order';
 import axios from "../../Axios-orders";
-// import withErrorHandler from '../../hoc/WithErrorHandler/withErrorHandler';
+import withErrorHandler from '../../hoc/WithErrorHandler/withErrorHandler';
 
 class Orders extends Component{
 
@@ -12,7 +12,7 @@ class Orders extends Component{
 
     componentDidMount(){
 
-        axios.get('/orders.json')
+        axios.get('/orders')
             .then( res => { 
                 // console.log(res.data);
                 const fetchedOrders = [];
@@ -25,7 +25,7 @@ class Orders extends Component{
                 this.setState({ loading: false, orders: fetchedOrders }) 
             })
             .catch( err => { 
-                this.setState({loading: false})
+                this.setState({loading: false});
             });
     }
 
@@ -43,5 +43,5 @@ class Orders extends Component{
     }
 }
 
-export default Orders;
-// export default withErrorHandler(Orders, axios);
+// export default Orders;
+export default withErrorHandler(Orders, axios);
