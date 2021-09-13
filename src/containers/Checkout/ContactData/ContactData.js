@@ -1,10 +1,12 @@
 import {Component} from 'react';
+import {connect} from 'react-redux';
+
 import Button from '../../../components/UI/Button/Button';
 import styles from './ContactData.module.css';
 import axios from '../../../Axios-orders';
 import Spinner from '../../../components/UI/Spinner/Spinner';
 import Input from '../../../components/UI/Input/Input';
-import {connect} from 'react-redux';
+
 
 class ContactData extends Component{
     
