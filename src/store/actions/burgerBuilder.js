@@ -28,9 +28,9 @@ export const fetchIngredientsFailed = () => {
     }
 }
 
-export const initIngredient = () => {
+export const initIngredients = () => {
     return dispatch => {
-        axios.get('https://react-complete-project-default-rtdb.asia-southeast1.firebasedatabase.app/ingredients.json')
+        axios.get('URL')
             .then( response => {
                 dispatch( setIngredients( response.data ) );
             })
