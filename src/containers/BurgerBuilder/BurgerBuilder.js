@@ -14,21 +14,7 @@ import * as burgerBuilderActions from '../../store/actions/index';
 class BurgerBuilder extends Component{
 
     state = {
-        purchasing: false,
-        loading: false,
-        error: false
-    }
-
-    componentDidMount(){
-        // console.log(this.props);
-        // axios.get('URL')
-        //     .then( response => {
-        //         this.setState({ ingredients: response.data });
-        //     })
-        //     .catch( error =>{
-        //         // console.log(error);
-        //         this.setState({ error: true})
-        //     });
+        purchasing: false
     }
 
     updatePurchaseState(ingredients) {
@@ -89,10 +75,6 @@ class BurgerBuilder extends Component{
             ); 
         }
 
-        if( this.state.loading ){
-            orderSummary = <Spinner />;
-        }
-
         return(
             <Aux>
                 <Modal show={this.state.purchasing} modalClosed={this.purchaseCancelHandler}>
@@ -117,4 +99,4 @@ const mapDispatchToProps = dispatch => {
     }
 }
 
-export default connect( mapStateToProps, mapDispatchToProps )(withErrorHandler(BurgerBuilder, axios));
+export default connect( mapStateToProps, mapDispatchToProps )( withErrorHandler( BurgerBuilder, axios ) );
