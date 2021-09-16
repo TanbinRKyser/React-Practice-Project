@@ -22,16 +22,23 @@ export const purchaseBurgerStart = () => {
 }
 
 export const purchaseBurger = ( orderData ) => {
+
     return dispatch => {
+
         dispatch( purchaseBurgerStart() );
-        axios.post('/orders.json' , orderData)
+
+        axios.post( '/orders.json' , orderData )
                 .then( response => {
-                    console.log( response.data );
-                    dispatch( purchaseBurgerSuccess( response.data, orderData ) );
+                    dispatch( 
+                        purchaseBurgerSuccess( 
+                            response.data.name, 
+                            orderData 
+                        ) 
+                    )
                 })
                 .catch( error => {
-                    console.log( error.data );
                     dispatch( purchaseBurgerFail( error ) );
                 });
+
     }
 }

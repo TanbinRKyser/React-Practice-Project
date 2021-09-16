@@ -35,14 +35,17 @@ class Checkout extends Component{
         }
 
         return(
-            { summary }
+            <div>
+                { summary }
+            </div>
+            
         );
     }
 }
 
 const mapStateToProps = state => {
     return{
-        igdt: state.ingredients
+        igdt: state.burgerBuilder.ingredients
     };
 };
 
