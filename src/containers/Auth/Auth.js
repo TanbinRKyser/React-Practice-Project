@@ -38,11 +38,11 @@ class Auth extends Component {
                 valid: false,
                 touched: false
             }
-        }
+        },
+        isSignup: true
     }
 
     checkValidity( value, rules ) {
-        
         let isValid = true;
         
         if ( !rules ) {
@@ -74,8 +74,7 @@ class Auth extends Component {
         return isValid;
     }
 
-    inputChangedHandler = ( event, controlName ) => {
-        
+    inputChangedHandler = ( event, controlName ) => { 
         const updatedControls = {
             ...this.state.controls,
             [controlName]: {
@@ -91,7 +90,13 @@ class Auth extends Component {
 
     onSubmitHandler = ( event ) => {
         event.preventDefault();
-        this.props.onAuth( this.state.controls.email.value, this.state.controls.password.value );
+        this.props.onAuth( this.state.controls.email.value, this.state.controls.password.value, this.state.isSignup );
+    }
+
+    switchOffModeHandler = () => {
+        this.setState( prevState => { 
+            return { isSignup: !prevState.isSignup }
+         });
     }
 
     render(){
@@ -123,6 +128,11 @@ class Auth extends Component {
                     { form }    
                     <Button buttonType="Success">Submit</Button>
                 </form>
+                <Button 
+                    buttonType="Danger"
+                    clicked={ this.switchOffModeHandler }>
+                        Switch To { this.state.isSignup ? 'Sign In' : 'Sign Up' }
+                </Button>
             </div>
         );
     }
@@ -130,7 +140,7 @@ class Auth extends Component {
 
 const mapDispatchToProps = dispatch => {
     return{
-        onAuth : ( email, password ) => dispatch( actions.auth( email, password ) )
+        onAuth : ( email, password, isSignup ) => dispatch( actions.auth( email, password, isSignup ) )
     }
 }
 

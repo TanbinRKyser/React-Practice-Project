@@ -8,6 +8,7 @@ export const authStart = () => {
 }
 
 export const authSuccess = ( authData ) => {
+    // console.log( authData.registered ? 'Verified' : 'Log in first');
     return{
         type: actionTypes.AUTH_SUCCESS,
         authData: authData
@@ -15,13 +16,14 @@ export const authSuccess = ( authData ) => {
 }
 
 export const authFail = ( error ) => {
+    // console.log( error.response.data.error.message);
     return{
         type: actionTypes.AUTH_FAIL,
         error: error
     }
 }
 
-export const auth = ( email, password ) => {
+export const auth = ( email, password, isSignup ) => {
     return dispatch => {
         dispatch( authStart() );
         const authData = {
@@ -29,7 +31,17 @@ export const auth = ( email, password ) => {
             password: password,
             returnSecureToken: true
         };
-        axios.post('https://identitytoolkit.googleapis.com/v1/accounts:signUp?key=[API_KEY]', authData )
+
+        let url = 'https://identitytoolkit.googleapis.com/v1/accounts:';
+        let API_KEY = 'API_KEY';
+
+        if( !isSignup ){
+            url = url + 'signInWithPassword?key=' + API_KEY;
+        } else {
+            url = url + 'signUp?key=' + API_KEY;
+        }
+        // console.log( url );
+        axios.post( url, authData )
             .then( response => {
                 console.log( response );
                 dispatch( authSuccess( response.data ) );
