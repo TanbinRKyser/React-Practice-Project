@@ -34,7 +34,10 @@ class BurgerBuilder extends Component{
     }
 
     purchaseHandler = () => {
-        this.setState({ purchasing: true });
+        if( this.props.authenticated )
+            this.setState({ purchasing: true });
+        else 
+            this.props.history.push('/auth');
     }
 
     purchaseCancelHandler = () => {
@@ -52,8 +55,8 @@ class BurgerBuilder extends Component{
             ...this.props.igdt
         };
 
-        for (let key in disabledInfo) {
-            disabledInfo[key] = disabledInfo[key] <= 0;
+        for ( let key in disabledInfo ) {
+            disabledInfo[ key ] = disabledInfo[ key ] <= 0;
         }
 
         let orderSummary = null;
@@ -61,32 +64,35 @@ class BurgerBuilder extends Component{
 
      
         if( this.props.igdt ){
-            burger = (<Aux>
-                <Burger ingredients= {this.props.igdt }/>
-                <BuildControls 
-                    ingredientAdded={ this.props.onAddIngredient } 
-                    ingredientRemoved={ this.props.onRemoveIngredient } 
-                    disabled={ disabledInfo }
-                    price={ this.props.prc }
-                    purchasable={ this.updatePurchaseState( this.props.igdt ) }
-                    ordered={ this.purchaseHandler } />
-            </Aux>);
+            burger = (
+                <Aux>
+                    <Burger ingredients = {this.props.igdt }/>
+                    <BuildControls 
+                        ingredientAdded = { this.props.onAddIngredient } 
+                        ingredientRemoved = { this.props.onRemoveIngredient } 
+                        disabled = { disabledInfo }
+                        price = { this.props.prc }
+                        purchasable = { this.updatePurchaseState( this.props.igdt ) }
+                        ordered = { this.purchaseHandler } 
+                        authenticated = { this.props.authenticated } />
+                </Aux>
+            );
 
             orderSummary = (
                             <OrderSummary 
-                                ingredients={ this.props.igdt }
-                                purchaseCancelHandler={ this.purchaseCancelHandler }
-                                purchaseContinueHandler={ this.purchaseContinueHandler } 
-                                price={ this.props.prc } />
+                                ingredients = { this.props.igdt }
+                                purchaseCancelHandler = { this.purchaseCancelHandler }
+                                purchaseContinueHandler = { this.purchaseContinueHandler } 
+                                price = { this.props.prc } />
             ); 
         }
 
         return(
             <Aux>
-                <Modal show={this.state.purchasing} modalClosed={this.purchaseCancelHandler}>
-                    {orderSummary}
+                <Modal show = { this.state.purchasing } modalClosed={ this.purchaseCancelHandler }>
+                    { orderSummary }
                 </Modal>
-               {burger}
+               { burger }
             </Aux>
         );
     }
@@ -96,7 +102,8 @@ const mapStateToProps = state => {
     return{
         igdt: state.burgerBuilder.ingredients,
         prc: state.burgerBuilder.totalPrice,
-        err: state.burgerBuilder.error
+        err: state.burgerBuilder.error,
+        authenticated: state.auth.token !== null
     };
 }
 const mapDispatchToProps = dispatch => {
@@ -105,7 +112,6 @@ const mapDispatchToProps = dispatch => {
         onRemoveIngredient: ( ingName ) => dispatch(actions.removeIngredient( ingName ) ),
         onInitIngredients: () => dispatch( actions.initIngredients() ),
         onInitPurchase: () => dispatch( actions.purchaseInit() ) 
-         
     }
 }
 
