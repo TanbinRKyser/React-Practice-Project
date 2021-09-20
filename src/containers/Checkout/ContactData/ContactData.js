@@ -1,5 +1,5 @@
-import {Component} from 'react';
-import {connect} from 'react-redux';
+import { Component } from 'react';
+import { connect } from 'react-redux';
 
 import Button from '../../../components/UI/Button/Button';
 import styles from './ContactData.module.css';
@@ -7,6 +7,7 @@ import axios from '../../../Axios-orders';
 import Spinner from '../../../components/UI/Spinner/Spinner';
 import Input from '../../../components/UI/Input/Input';
 import withErrorHandler from '../../../hoc/WithErrorHandler/withErrorHandler';
+import { updateObject, checkValidity } from '../../../shared/utility';
 import * as actions from '../../../store/actions/index';
 
 class ContactData extends Component{
@@ -62,7 +63,8 @@ class ContactData extends Component{
                 validation: {
                     required: true,
                     minLength: 5,
-                    maxLength: 5
+                    maxLength: 5,
+                    isNumeric: true
                 },
                 valid: false,
                 touched: false
@@ -75,7 +77,8 @@ class ContactData extends Component{
                 },
                 value: '',
                 validation: {
-                    required: true
+                    required: true,
+                    isEmail: true
                 },
                 valid: false,
                 touched: false
@@ -94,25 +97,6 @@ class ContactData extends Component{
             }
         },
         formIsValid: false
-    }
-
-    checkValidatity( value, rules ){
-        let isValid = true;
-        
-        if(!rules) return true;
-        if( rules.required ){
-            isValid = value.trim() !== '' && isValid;
-        }
-
-        if( rules.minLength ){
-            isValid = value.length >= rules.minLength && isValid;
-        }
-
-        if( rules.maxLength ){
-            isValid = value.length <= rules.maxLength && isValid;
-        }
-
-        return isValid;
     }
 
     orderHandler = (event) => {
@@ -135,19 +119,19 @@ class ContactData extends Component{
     }
 
     inputChangeHandler = ( event, inputIdentifier ) => {
-        // console.log(event.target.value);
-        const updatedOrderForm = {
-            ...this.state.orderForm
-        };
 
-        const updatedFormElements = { ...updatedOrderForm[inputIdentifier] };
+        const updatedFormElements = updateObject( this.state.orderForm[inputIdentifier],{ 
+            value: event.target.value,
+            valid: checkValidity( event.target.value, this.state.orderForm[inputIdentifier].validation ),
+            touched: true
+        } );
 
-        updatedFormElements.value = event.target.value;
-        updatedFormElements.valid = this.checkValidatity( updatedFormElements.value, updatedFormElements.validation );
-        updatedFormElements.touched = true;
-        // console.log(updatedFormElements);
+        const updatedOrderForm = updateObject( this.state.orderForm, { 
+            [inputIdentifier] : updatedFormElements
+        } );
 
         let formIsValid = true;
+        
         for( let inputIdentifier in updatedOrderForm ){
             formIsValid = updatedOrderForm[inputIdentifier].valid && formIsValid;
         }
