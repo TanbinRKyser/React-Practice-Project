@@ -1,8 +1,14 @@
 import React from 'react';
 import BurgerIngredients from '../Burger/BurgerIngredients/BurgerIngredients';
 import styles from './Burger.module.css';
+import {withRouter} from 'react-router-dom';
 
+// withRouter higher order component will give us match, location, history property in burger.js from which we will 
+// get from the burger builder file.
 const burger = (props) => {
+
+    console.log(props);
+
     let transformedIngredients = Object.keys( props.ingredients )
                                         .map( igKey => {
                                             return [...Array( props.ingredients[igKey] )].map( (_, index) => { 
@@ -25,4 +31,4 @@ const burger = (props) => {
     );
 }
 
-export default burger;
+export default withRouter(burger);
