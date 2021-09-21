@@ -53,14 +53,14 @@ class Auth extends Component {
 
     inputChangedHandler = ( event, controlName ) => { 
         const updatedControls = updateObject( this.state.controls, {
-            [controlName]: updateObject( this.state.controls[controlName], {
+            [ controlName ]: updateObject( this.state.controls[ controlName ], {
                 value: event.target.value,
-                valid: checkValidity( event.target.value, this.state.controls[controlName].validation ),
+                valid: checkValidity( event.target.value, this.state.controls[ controlName ].validation ),
                 touched: true
             })
         } );
         
-        this.setState({controls: updatedControls});
+        this.setState({ controls: updatedControls });
     }
 
     onSubmitHandler = ( event ) => {
@@ -102,8 +102,9 @@ class Auth extends Component {
         }
 
         let errorMessage = null;
+
         if( this.props.error ){
-            errorMessage = (<p>{this.props.error.message}</p>);
+            errorMessage = (<p>{ this.props.error.message }</p>);
         }
 
         let redirect = null;
@@ -113,13 +114,16 @@ class Auth extends Component {
         }
 
         return(
-            <div className={styles.Auth}>
-                {redirect}
-                {errorMessage}
-                <form onSubmit={this.onSubmitHandler}>
+            <div className={ styles.Auth }>
+                { redirect }
+                
+                { errorMessage }
+               
+                <form onSubmit={ this.onSubmitHandler }>
                     { form }    
                     <Button buttonType="Success">Submit</Button>
                 </form>
+               
                 <Button 
                     buttonType="Danger"
                     clicked={ this.switchOffModeHandler }>
